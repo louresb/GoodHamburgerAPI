@@ -29,9 +29,6 @@ Thumbs.db
 docker-compose*
 Dockerfile*
 
-# Test projects 
-tests/
-
 # Kubernetes / Helm 
 charts/
 *.yaml
