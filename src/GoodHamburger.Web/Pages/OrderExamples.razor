@@ -1,0 +1,59 @@
+@page "/order-examples"
+@using GoodHamburger.Web.Models
+@inject OrderService OrderService
+@inject NavigationManager Navigation
+
+<h3>🚀 Order Examples</h3>
+
+<p>
+    This page demonstrates direct access to routes with parameters, such as viewing and editing orders.
+    Each button will create a sample order and redirect you to the corresponding page.
+</p>
+
+<div class="card p-4 mt-3 shadow-sm">
+    <h5>🔍 Order Details</h5>
+    <p>Creates a sample order and redirects to its details page.</p>
+    <button class="btn btn-outline-primary me-2" @onclick="CreateOrderAndViewDetails">View Order Details</button>
+</div>
+
+<div class="card p-4 mt-4 shadow-sm">
+    <h5>✏️ Edit Order</h5>
+    <p>Creates a sample order and redirects to its edit page.</p>
+    <button class="btn btn-outline-secondary" @onclick="CreateOrderAndEdit">Edit Order</button>
+</div>
+
+@code {
+    private async Task CreateOrderAndViewDetails()
+    {
+        var request = new OrderRequest
+        {
+            SandwichId = 1, 
+            FriesId = 4,    
+            SoftDrinkId = 5 
+        };
+
+        var response = await OrderService.CreateAsync(request);
+
+        if (response != null)
+        {
+            Navigation.NavigateTo($"/orders/details/{response.Id}");
+        }
+    }
+
+    private async Task CreateOrderAndEdit()
+    {
+        var request = new OrderRequest
+        {
+            SandwichId = 2, 
+            FriesId = null,
+            SoftDrinkId = 5 
+        };
+
+        var response = await OrderService.CreateAsync(request);
+
+        if (response != null)
+        {
+            Navigation.NavigateTo($"/orders/edit/{response.Id}");
+        }
+    }
+}

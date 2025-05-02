@@ -1,0 +1,48 @@
+﻿@page "/"
+
+<h3>Welcome to the GOOD HAMBURGER Challenge 🍔🍟🥤</h3>
+
+<p>
+    This project was developed as part of a technical test for a backend developer position.
+</p>
+
+<div class="card p-4 mt-3 shadow-sm">
+    <h5>📝 Challenge Overview</h5>
+    <p>
+        The goal is to build a simple order system for a fictional hamburger restaurant using a Web API.
+    </p>
+
+    <p><strong>Sandwich Options:</strong></p>
+    <ul>
+        <li>X-Burger – $5.00</li>
+        <li>X-Egg – $4.50</li>
+        <li>X-Bacon – $7.00</li>
+    </ul>
+
+    <p><strong>Extras:</strong></p>
+    <ul>
+        <li>Fries – $2.00</li>
+        <li>Soft Drink – $2.50</li>
+    </ul>
+
+    <p><strong>Discount Rules:</strong></p>
+    <ul>
+        <li>Sandwich + Fries + Soft Drink → 20% discount</li>
+        <li>Sandwich + Soft Drink → 15% discount</li>
+        <li>Sandwich + Fries → 10% discount</li>
+    </ul>
+
+    <p><strong>Behavior:</strong></p>
+    <p>
+        The customer can select one sandwich and optionally add one fries and/or one soft drink.
+        The discount is calculated automatically based on the combination selected.
+        If the order contains duplicate items (e.g., two sandwiches), the system will reject it.
+    </p>
+
+    <p>
+        After placing an order, you can view its details or edit it through the menu or the examples page.
+    </p>
+</div>
+
+<a href="/place-order" class="btn btn-success mt-4">Make an Order</a>
+<a href="/products" class="btn btn-outline-secondary mt-4 ms-2">View Products</a>

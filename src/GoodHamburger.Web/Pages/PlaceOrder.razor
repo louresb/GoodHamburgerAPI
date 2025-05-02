@@ -1,0 +1,94 @@
+@page "/place-order"
+@inject ProductService ProductService
+@inject OrderService OrderService
+@using GoodHamburger.Web.Models
+
+<h3>Place Your Order</h3>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="order" OnValidSubmit="SubmitOrder">
+        <div class="mb-3">
+            <label>Sandwich:</label>
+            <select class="form-select" @bind="order.SandwichId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Type == "Sandwich"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Fries:</label>
+            <select class="form-select" @bind="order.FriesId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Name == "Fries"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Soft Drink:</label>
+            <select class="form-select" @bind="order.SoftDrinkId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Name == "Soft Drink"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Place Order</button>
+    </EditForm>
+
+    @if (totalPrice != null)
+    {
+        <div class="alert alert-success mt-3">
+            Order placed! Final price: <strong>@totalPrice.Value.ToString("C")</strong>
+        </div>
+    }
+
+    @if (!string.IsNullOrWhiteSpace(errorMessage))
+    {
+        <div class="alert alert-danger mt-3">
+            @errorMessage
+        </div>
+    }
+}
+
+@code {
+    private List<Product>? products;
+    private OrderRequest order = new();
+
+    private decimal? totalPrice;
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetAllAsync();
+    }
+
+    private async Task SubmitOrder()
+    {
+        try
+        {
+            var created = await OrderService.CreateAsync(order);
+            totalPrice = created.TotalPrice;
+            errorMessage = null;
+
+            order = new();
+        }
+        catch (Exception ex)
+        {
+            totalPrice = null;
+            errorMessage = ex.Message;
+        }
+    }
+}
