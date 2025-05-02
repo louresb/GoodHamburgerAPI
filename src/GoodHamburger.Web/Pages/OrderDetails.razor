@@ -1,0 +1,55 @@
+@page "/orders/details/{Id:int}"
+@inject OrderService OrderService
+@using GoodHamburger.Web.Models
+
+<h3>Order Details</h3>
+
+@if (order == null || products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    var sandwich = products.FirstOrDefault(p => p.Id == order.SandwichId);
+    var fries = products.FirstOrDefault(p => p.Id == order.FriesId);
+    var softDrink = products.FirstOrDefault(p => p.Id == order.SoftDrinkId);
+
+    decimal originalPrice = 
+        (sandwich?.Price ?? 0) + 
+        (fries?.Price ?? 0) + 
+        (softDrink?.Price ?? 0);
+
+    <div class="card p-4 shadow-sm">
+        <p><strong>Sandwich:</strong> @(sandwich?.Name ?? "None") (@(sandwich?.Price.ToString("C") ?? "-"))</p>
+        <p><strong>Fries:</strong> @(fries?.Name ?? "None") (@(fries?.Price.ToString("C") ?? "-"))</p>
+        <p><strong>Soft Drink:</strong> @(softDrink?.Name ?? "None") (@(softDrink?.Price.ToString("C") ?? "-"))</p>
+
+        <hr />
+        <p><strong>Original Price:</strong> @originalPrice.ToString("C")</p>
+        <p><strong>Total Price (with discount):</strong> @order.TotalPrice.ToString("C")</p>
+
+        <a class="btn btn-outline-primary mt-3" href="/orders">Back to Orders</a>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private OrderResponse? order;
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            order = await OrderService.GetByIdAsync(Id);
+            products = await OrderService.GetAllProductsAsync();
+        }
+        catch
+        {
+            order = null;
+            products = null;
+        }
+    }
+}

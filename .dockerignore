@@ -1,0 +1,38 @@
+# Build artifacts
+bin/
+obj/
+**/bin/
+**/obj/
+publish/
+
+# IDE and tooling
+.vscode/
+.vs/
+.idea/
+*.user
+*.suo
+*.dbmdl
+*.jfm
+*.proj.user
+
+# OS and temp files
+.DS_Store
+Thumbs.db
+.env
+*.log
+
+# Git
+.git/
+.gitignore
+
+# Docker 
+docker-compose*
+Dockerfile*
+
+# Test projects 
+tests/
+
+# Kubernetes / Helm 
+charts/
+*.yaml
+

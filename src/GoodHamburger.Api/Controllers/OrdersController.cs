@@ -37,6 +37,16 @@ public class OrdersController : ControllerBase
         return Ok(orders);
     }
 
+    [HttpGet("{id}")]
+    public ActionResult<Order> GetById(int id)
+    {
+        var order = _orderService.GetAll().FirstOrDefault(o => o.Id == id);
+        if (order == null)
+            return NotFound();
+
+        return Ok(order);
+    }
+
     [HttpPut("{id}")]
     public ActionResult<Order> UpdateOrder(int id, [FromBody] OrderRequest request)
     {

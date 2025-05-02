@@ -1,0 +1,18 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: src/GoodHamburger.Api/Dockerfile
+    container_name: goodhamburger-api
+    ports:
+      - "8080:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+  web:
+    build:
+      context: ./src/GoodHamburger.Web
+      dockerfile: Dockerfile
+    container_name: goodhamburger-web
+    ports:
+      - "5173:80"

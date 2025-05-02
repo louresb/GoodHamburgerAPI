@@ -1,0 +1,78 @@
+@page "/orders/edit/{Id:int}"
+@inject OrderService OrderService
+@inject NavigationManager Navigation
+@using GoodHamburger.Web.Models
+
+
+<h3>Edit Order</h3>
+
+@if (order == null || products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <EditForm Model="order" OnValidSubmit="Submit">
+        <div class="mb-3">
+            <label>Sandwich:</label>
+            <select class="form-select" @bind="order.SandwichId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Type == "Sandwich"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Fries:</label>
+            <select class="form-select" @bind="order.FriesId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Name == "Fries"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label>Soft Drink:</label>
+            <select class="form-select" @bind="order.SoftDrinkId">
+                <option value="">-- Select --</option>
+                @foreach (var item in products.Where(p => p.Name == "Soft Drink"))
+                {
+                    <option value="@item.Id">@item.Name - @item.Price.ToString("C")</option>
+                }
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+    </EditForm>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private OrderRequest order = new();
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var existing = await OrderService.GetByIdAsync(Id);
+        order = new OrderRequest
+        {
+            SandwichId = existing.SandwichId,
+            FriesId = existing.FriesId,
+            SoftDrinkId = existing.SoftDrinkId
+        };
+
+        products = await OrderService.GetAllProductsAsync();
+    }
+
+    private async Task Submit()
+    {
+        await OrderService.UpdateAsync(Id, order);
+        Navigation.NavigateTo("/orders");
+    }
+}

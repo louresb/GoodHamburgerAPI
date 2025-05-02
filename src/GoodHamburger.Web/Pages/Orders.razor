@@ -1,0 +1,72 @@
+@page "/orders"
+@inject OrderService OrderService
+@using GoodHamburger.Web.Models
+
+<h3>Your Orders</h3>
+
+@if (orders == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (!orders.Any())
+{
+    <p>No orders found.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Sandwich</th>
+                <th>Fries</th>
+                <th>Soft Drink</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@DisplayProduct(order.SandwichId)</td>
+                    <td>@DisplayProduct(order.FriesId)</td>
+                    <td>@DisplayProduct(order.SoftDrinkId)</td>
+                    <td>@order.TotalPrice.ToString("C")</td>
+                    <td>
+                        <a class="btn btn-outline-secondary btn-sm me-2" href="@($"/orders/edit/{order.Id}")">
+                            ✏️ Edit
+                        </a>
+                        <button class="btn btn-danger btn-sm" @onclick="() => Delete(order.Id)">
+                            🗑️ Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<OrderResponse>? orders;
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await OrderService.GetAllProductsAsync();
+        orders = await OrderService.GetAllAsync();
+    }
+
+    private string DisplayProduct(int? id)
+    {
+        if (id == null || products == null) return "-";
+        return products.FirstOrDefault(p => p.Id == id)?.Name ?? $"ID {id}";
+    }
+
+    private async Task Delete(int id)
+    {
+        await OrderService.DeleteAsync(id);
+        orders = await OrderService.GetAllAsync();
+    }
+}

@@ -1,0 +1,28 @@
+@page "/products"
+@using GoodHamburger.Web.Models
+@inject ProductService ProductService
+
+<h3>Products</h3>
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <ul>
+        @foreach (var p in products)
+        {
+            <li>@p.Name - @p.Price.ToString("C")</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Product>? products;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = await ProductService.GetAllAsync();
+    }
+}
