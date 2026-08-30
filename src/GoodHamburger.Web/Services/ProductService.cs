@@ -12,6 +12,6 @@ public class ProductService
 
     public async Task<List<Product>> GetAllAsync()
     {
-        return await _http.GetFromJsonAsync<List<Product>>("api/products");
+        return await _http.GetFromJsonAsync<List<Product>>("api/products") ?? [];
     }
 }

@@ -2,28 +2,40 @@ name: .NET Build and Test
 
 on:
   push:
-    branches: [ "**" ]
+    branches: [main]
   pull_request:
-    branches: [ "**" ]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout do código
-      uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-    - name: Instalar .NET
-      uses: actions/setup-dotnet@v4
+    - name: Setup .NET
+      uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
       with:
         dotnet-version: 8.0.x
 
-    - name: Restaurar dependências
-      run: dotnet restore
+    - name: Restore dependencies
+      run: dotnet restore GoodHamburger.sln
 
-    - name: Build da solução
-      run: dotnet build --configuration Release --no-restore
+    - name: Build solution
+      run: dotnet build GoodHamburger.sln --configuration Release --no-restore -p:ContinuousIntegrationBuild=true
 
-    - name: Rodar Testes
-      run: dotnet test tests/GoodHamburger.Tests/GoodHamburger.Tests.csproj --no-build --configuration Release --verbosity normal --collect:"XPlat Code Coverage"
+    - name: Run tests
+      run: dotnet test GoodHamburger.sln --configuration Release --no-build --collect:"XPlat Code Coverage"

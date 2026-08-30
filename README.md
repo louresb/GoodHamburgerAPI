@@ -3,7 +3,7 @@
 [![Build Status](https://github.com/louresb/GoodHamburgerAPI/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/louresb/GoodHamburgerAPI/actions/workflows/build-and-test.yml)
 ![Status](https://img.shields.io/badge/Status-Concluded-green)
 
-This project is a backend-focused solution built with C# and .NET 8 to simulate an order management system for a hamburger restaurant, applying specific business and discount rules in a real-world scenario.
+This repository contains a backend-focused technical challenge built with C# and .NET 8. It implements an order management system for a hamburger restaurant, including the required business and discount rules and an optional Blazor WebAssembly interface.
 
 ## 🎯 Project Objective
 
@@ -132,7 +132,7 @@ An optional frontend was created using **Blazor WebAssembly** to enhance the pre
 | `/orders/edit/{id}`| Edit an existing order                   |
 | `/orders/details/{id}` | View full order details             |
 
-The frontend communicates with the API using `HttpClient`, dynamically resolving the base address (localhost or Docker alias `http://api/`).
+The frontend communicates with the API using `HttpClient` through the API port exposed by Docker Compose.
 
 ---
 
@@ -142,12 +142,12 @@ The frontend communicates with the API using `HttpClient`, dynamically resolving
 - Full CRUD for orders with business rules enforced
 - API tested via Swagger and Postman
 - Extra Blazor frontend to visualize the solution
-- CI/CD configured with GitHub Actions
+- CI pipeline for the API, Blazor frontend and tests
 - Fully Dockerized for local testing and presentation
 
 ---
 
 ### ✅ Final Notes
 
-- This solution was developed with care to fully meet the challenge requirements, while also showcasing practical development skills using modern .NET technologies.
-- The extra frontend is intended to enrich the experience and demonstrate full-stack integration.
+- This repository is preserved as a concluded technical challenge and reflects its original requirements.
+- The optional frontend extends the required API with a simple interface for exercising the order flow.

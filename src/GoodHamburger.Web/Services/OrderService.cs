@@ -13,12 +13,13 @@ public class OrderService
     {
         var response = await _http.PostAsJsonAsync("api/orders", request);
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<OrderResponse>();
+        return await response.Content.ReadFromJsonAsync<OrderResponse>()
+            ?? throw new InvalidOperationException("The API returned an empty order response.");
     }
 
     public async Task<List<OrderResponse>> GetAllAsync()
     {
-        return await _http.GetFromJsonAsync<List<OrderResponse>>("api/orders");
+        return await _http.GetFromJsonAsync<List<OrderResponse>>("api/orders") ?? [];
     }
 
     public async Task DeleteAsync(int id)
@@ -27,17 +28,17 @@ public class OrderService
         response.EnsureSuccessStatusCode();
     }
 
-    // auxiliar para mostrar nomes dos produtos
     public async Task<List<Product>> GetAllProductsAsync()
     {
-        return await _http.GetFromJsonAsync<List<Product>>("api/products");
+        return await _http.GetFromJsonAsync<List<Product>>("api/products") ?? [];
     }
 
     public async Task<OrderResponse> GetByIdAsync(int id)
     {
         var response = await _http.GetAsync($"api/orders/{id}");
         response.EnsureSuccessStatusCode();
-        return await response.Content.ReadFromJsonAsync<OrderResponse>();
+        return await response.Content.ReadFromJsonAsync<OrderResponse>()
+            ?? throw new InvalidOperationException("The API returned an empty order response.");
     }
 
     public async Task UpdateAsync(int id, OrderRequest request)
